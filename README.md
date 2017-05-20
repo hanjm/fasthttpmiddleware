@@ -1,4 +1,4 @@
-## a middleware for [fasthttp](github.com/valyala/fasthttp). inspired by [Alice](https://github.com/justinas/alice)
+## a funny middleware onion for [fasthttp](github.com/valyala/fasthttp). inspired by [Alice](https://github.com/justinas/alice)
 
 ### Example
 

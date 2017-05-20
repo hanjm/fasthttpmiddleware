@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-echo "## a middleware for [fasthttp](github.com/valyala/fasthttp). inspired by [Alice](https://github.com/justinas/alice)"
+echo "## a funny middleware onion for [fasthttp](github.com/valyala/fasthttp). inspired by [Alice](https://github.com/justinas/alice)"
 echo ""
 echo "### Example"
 echo ""
