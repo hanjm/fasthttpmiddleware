@@ -7,7 +7,6 @@ package main
 
 import (
 	"bytes"
-	"fasthttpmiddleware"
 	"github.com/buaazp/fasthttprouter"
 	"github.com/hanjm/fasthttpmiddleware"
 	"github.com/hanjm/zaplog"
