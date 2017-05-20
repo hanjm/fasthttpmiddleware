@@ -7,18 +7,18 @@ import (
 
 type Middleware func(h fasthttp.RequestHandler) fasthttp.RequestHandler
 
-// MiddlewareOnion represent the middlewares like a onion,
+// MiddlewareOnion represent the middleware like an onion,
 // the bigger index of middleware in MiddlewareOnion.layers locate at outside
 type MiddlewareOnion struct {
 	layers []Middleware
 }
 
-// New return a middleware onion with given middlewares
+// New returns a middleware onion with given middlewares
 func New(middlewares ...Middleware) MiddlewareOnion {
 	return MiddlewareOnion{append([]Middleware{}, middlewares...)}
 }
 
-// NewNormalMiddlewareOnion return a normal middleware onion. recover -> auth -> log.
+// NewNormalMiddlewareOnion returns a normal middleware onion. recover -> auth -> log.
 // the type of AuthFunc is "func(ctx *fasthttp.RequestCtx) bool"
 func NewNormalMiddlewareOnion(authFunc AuthFunc, logger *zap.Logger) MiddlewareOnion {
 	return MiddlewareOnion{[]Middleware{
@@ -35,7 +35,7 @@ func (o MiddlewareOnion) Apply(h fasthttp.RequestHandler) fasthttp.RequestHandle
 	return h
 }
 
-// Append copy all middleware layers to newLayers, then append middlewares in to newLayers
+// Append copy all middleware layers to newLayers, then append middlewares to newLayers
 func (o MiddlewareOnion) Append(middlewares ...Middleware) []Middleware {
 	newLayers := make([]Middleware, 0, len(o.layers)+len(middlewares))
 	newLayers = append(newLayers, o.layers...)
