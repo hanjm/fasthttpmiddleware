@@ -61,7 +61,7 @@ func NewLogMiddleware(logger *zap.Logger, xRealIp bool) Middleware
     NewLogMiddleware return a middleware which log code(status code),
     time(response time), method(request method), path(request url ath),
     addr(remote addr). if status code is 2xx, the log level is info,
-    otherwise warn. if your app is behind of Nginx, you you may meed to set
+    otherwise warn. if your app is behind of Nginx, you may meed to set
     xRealIp to True so that get a actual remoteAdr.
 
 func NewRecoverMiddleware(logger *zap.Logger) Middleware
