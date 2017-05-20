@@ -13,8 +13,8 @@ type MiddlewareOnion struct {
 	layers []Middleware
 }
 
-// New returns a middleware onion with given middlewares
-func New(middlewares ...Middleware) MiddlewareOnion {
+// MiddlewareOnion returns a middleware onion with given middlewares
+func NewMiddlewareOnion(middlewares ...Middleware) MiddlewareOnion {
 	return MiddlewareOnion{append([]Middleware{}, middlewares...)}
 }
 

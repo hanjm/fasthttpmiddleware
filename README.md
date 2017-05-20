@@ -75,8 +75,8 @@ type MiddlewareOnion struct {
     MiddlewareOnion represent the middleware like an onion, the bigger index
     of middleware in MiddlewareOnion.layers locate at outside
 
-func New(middlewares ...Middleware) MiddlewareOnion
-    New returns a middleware onion with given middlewares
+func NewMiddlewareOnion(middlewares ...Middleware) MiddlewareOnion
+    MiddlewareOnion returns a middleware onion with given middlewares
 
 func NewNormalMiddlewareOnion(authFunc AuthFunc, logger *zap.Logger) MiddlewareOnion
     NewNormalMiddlewareOnion returns a normal middleware onion. recover ->
