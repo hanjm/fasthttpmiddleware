@@ -5,6 +5,8 @@ import (
 	"go.uber.org/zap"
 )
 
+// NewRecoverMiddleware return a middleware which can let app recover from a panic in request handler.
+// panic stack info  will appear to "trace" field in log line
 func NewRecoverMiddleware(logger *zap.Logger) Middleware {
 	return func(h fasthttp.RequestHandler) fasthttp.RequestHandler {
 		return func(ctx *fasthttp.RequestCtx) {

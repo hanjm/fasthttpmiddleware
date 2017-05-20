@@ -22,7 +22,7 @@ func New(middlewares ...Middleware) MiddlewareOnion {
 // type AuthFunc func(ctx *fasthttp.RequestCtx) bool
 func NewNormalMiddlewareOnion(authFunc AuthFunc, logger *zap.Logger) MiddlewareOnion {
 	return MiddlewareOnion{[]Middleware{
-		NewLogMiddleware(logger),
+		NewLogMiddleware(logger, true),
 		NewAuthMiddleware(authFunc),
 		NewRecoverMiddleware(logger),
 	}}
