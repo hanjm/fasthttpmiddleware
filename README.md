@@ -60,9 +60,9 @@ func NewAuthMiddleware(authFunc AuthFunc) Middleware
 func NewLogMiddleware(logger *zap.Logger, xRealIp bool) Middleware
     NewLogMiddleware return a middleware which log code(status code),
     time(response time), method(request method), path(request url ath),
-    addr(remote addr) if statusCode is 2xx, the log level is info, otherwise
-    warn. if your app is behind of Nginx, you you may meed to set xRealIp to
-    True so that get a actual remoteAdr.
+    addr(remote addr). if status code is 2xx, the log level is info,
+    otherwise warn. if your app is behind of Nginx, you you may meed to set
+    xRealIp to True so that get a actual remoteAdr.
 
 func NewRecoverMiddleware(logger *zap.Logger) Middleware
     NewRecoverMiddleware return a middleware which can let app recover from
@@ -80,16 +80,17 @@ func New(middlewares ...Middleware) MiddlewareOnion
 
 func NewNormalMiddlewareOnion(authFunc AuthFunc, logger *zap.Logger) MiddlewareOnion
     NewNormalMiddlewareOnion return a normal middleware onion. recover ->
-    auth -> log type AuthFunc func(ctx *fasthttp.RequestCtx) bool
+    auth -> log. the type of AuthFunc is "func(ctx *fasthttp.RequestCtx)
+    bool"
 
 func (o MiddlewareOnion) Append(middlewares ...Middleware) []Middleware
-    Append will copy all middleware layers to newLayers, then append
-    middlewares in to newLayers
+    Append copy all middleware layers to newLayers, then append middlewares
+    in to newLayers
 
 func (o MiddlewareOnion) Apply(h fasthttp.RequestHandler) fasthttp.RequestHandler
 
 func (o MiddlewareOnion) Extend(middlewares ...Middleware)
-    Extend will then append middlewares in to MiddlewareOnion.layers
+    Extend append middlewares to MiddlewareOnion.layers
 
 
 

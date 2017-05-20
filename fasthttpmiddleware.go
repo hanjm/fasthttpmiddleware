@@ -18,8 +18,8 @@ func New(middlewares ...Middleware) MiddlewareOnion {
 	return MiddlewareOnion{append([]Middleware{}, middlewares...)}
 }
 
-// NewNormalMiddlewareOnion return a normal middleware onion. recover -> auth -> log
-// type AuthFunc func(ctx *fasthttp.RequestCtx) bool
+// NewNormalMiddlewareOnion return a normal middleware onion. recover -> auth -> log.
+// the type of AuthFunc is "func(ctx *fasthttp.RequestCtx) bool"
 func NewNormalMiddlewareOnion(authFunc AuthFunc, logger *zap.Logger) MiddlewareOnion {
 	return MiddlewareOnion{[]Middleware{
 		NewLogMiddleware(logger, true),
@@ -35,7 +35,7 @@ func (o MiddlewareOnion) Apply(h fasthttp.RequestHandler) fasthttp.RequestHandle
 	return h
 }
 
-// Append will copy all middleware layers to newLayers, then append middlewares in to newLayers
+// Append copy all middleware layers to newLayers, then append middlewares in to newLayers
 func (o MiddlewareOnion) Append(middlewares ...Middleware) []Middleware {
 	newLayers := make([]Middleware, 0, len(o.layers)+len(middlewares))
 	newLayers = append(newLayers, o.layers...)
@@ -43,7 +43,7 @@ func (o MiddlewareOnion) Append(middlewares ...Middleware) []Middleware {
 	return newLayers
 }
 
-// Extend will then append middlewares in to MiddlewareOnion.layers
+// Extend append middlewares to MiddlewareOnion.layers
 func (o MiddlewareOnion) Extend(middlewares ...Middleware) {
 	o.layers = append(o.layers, middlewares...)
 }
