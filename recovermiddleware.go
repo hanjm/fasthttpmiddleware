@@ -6,7 +6,7 @@ import (
 )
 
 // NewRecoverMiddleware return a middleware which can let app recover from a panic in request handler.
-// panic stack info will appear on the field named "trace" in the log line
+// panic stack info will appear on the field named "stacktrace" in the log line
 func NewRecoverMiddleware(logger *zap.Logger) Middleware {
 	return func(h fasthttp.RequestHandler) fasthttp.RequestHandler {
 		return func(ctx *fasthttp.RequestCtx) {
