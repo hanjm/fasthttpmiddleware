@@ -70,6 +70,12 @@ func NewLogMiddleware(logger *zap.Logger, xRealIp bool) Middleware
     otherwise, the log level is warn. if your app is behind of Nginx, you
     may meed to set xRealIp to True so that get an actual remote address.
 
+func NewPrometheusMiddleware(bindAddr string, xRealIp bool, logger *zap.Logger) Middleware
+    NewPrometheusMiddleware return a middleware which can be used by
+    [prometheus](https://github.com/prometheus/prometheus) The prometheus is
+    a monitoring system and time series database. Note: the returned
+    middleware is contain the function of logmiddleware.
+
 func NewRecoverMiddleware(logger *zap.Logger) Middleware
     NewRecoverMiddleware return a middleware which can let app recover from
     a panic in request handler. panic stack info will appear on the field
@@ -84,10 +90,11 @@ type MiddlewareOnion struct {
 func NewMiddlewareOnion(middlewares ...Middleware) MiddlewareOnion
     NewMiddlewareOnion returns a middleware onion with given middlewares
 
-func NewNormalMiddlewareOnion(authFunc AuthFunc, logger *zap.Logger) MiddlewareOnion
+func NewNormalMiddlewareOnion(authFunc AuthFunc, xRealIp bool, logger *zap.Logger) MiddlewareOnion
     NewNormalMiddlewareOnion returns a normal middleware onion. recover ->
     auth -> log. the type of AuthFunc is "func(ctx *fasthttp.RequestCtx)
-    bool"
+    bool". if your app is behind of Nginx, you may meed to set xRealIp to
+    True so that get an actual remote address.
 
 func (o MiddlewareOnion) Append(middlewares ...Middleware) MiddlewareOnion
     Append copy all middleware layers to newLayers, then append middlewares
