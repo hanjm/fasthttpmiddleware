@@ -1,4 +1,5 @@
 ## a funny middleware onion for [fasthttp](github.com/valyala/fasthttp). inspired by [Alice](https://github.com/justinas/alice)
+[![GoDoc](https://godoc.org/github.com/hanjm/fasthttpmiddleware?status.svg)](https://godoc.org/github.com/hanjm/fasthttpmiddleware)
 
 ### Example
 
@@ -62,7 +63,7 @@ func NewLogMiddleware(logger *zap.Logger, xRealIp bool) Middleware
     time(response time), method(request method), path(request URL ath),
     addr(remote address). if the status code is 2xx, the log level is info,
     otherwise, the log level is warn. if your app is behind of Nginx, you
-    may meed to set xRealIp to True so that get an actual remoteAdr.
+    may meed to set xRealIp to True so that get an actual remote address.
 
 func NewRecoverMiddleware(logger *zap.Logger) Middleware
     NewRecoverMiddleware return a middleware which can let app recover from
