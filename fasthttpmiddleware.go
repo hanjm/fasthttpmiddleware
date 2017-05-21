@@ -35,15 +35,7 @@ func (o MiddlewareOnion) Apply(h fasthttp.RequestHandler) fasthttp.RequestHandle
 	return h
 }
 
-// Append copy all middleware layers to newLayers, then append middlewares to newLayers
-func (o MiddlewareOnion) Append(middlewares ...Middleware) []Middleware {
-	newLayers := make([]Middleware, 0, len(o.layers)+len(middlewares))
-	newLayers = append(newLayers, o.layers...)
-	newLayers = append(newLayers, middlewares...)
-	return newLayers
-}
-
-// Extend append middlewares to MiddlewareOnion.layers
-func (o MiddlewareOnion) Extend(middlewares ...Middleware) {
-	o.layers = append(o.layers, middlewares...)
+// Append copy all middleware layers to newLayers, then append middlewares to newLayers, then return a new middleware onion.
+func (o MiddlewareOnion) Append(middlewares ...Middleware) MiddlewareOnion {
+	return MiddlewareOnion{append(o.layers, middlewares...)}
 }
