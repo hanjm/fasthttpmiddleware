@@ -54,7 +54,8 @@ type AuthFunc func(ctx *fasthttp.RequestCtx) bool
     AuthFunc is your custom auth function type
 
 type Middleware func(h fasthttp.RequestHandler) fasthttp.RequestHandler
-    Middleware is a function.
+    Middleware is a function which receive a fasthttp.RequestHandler then
+    return a fasthttp.RequestHandler.
 
 func NewAuthMiddleware(authFunc AuthFunc) Middleware
     NewAuthMiddleware accepts a customer auth function and then returns a

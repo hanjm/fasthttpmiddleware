@@ -5,7 +5,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Middleware is a function.
+// Middleware is a function which receive a fasthttp.RequestHandler then return a fasthttp.RequestHandler.
 type Middleware func(h fasthttp.RequestHandler) fasthttp.RequestHandler
 
 // MiddlewareOnion represent the middleware like an onion,
