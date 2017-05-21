@@ -20,10 +20,11 @@ func NewMiddlewareOnion(middlewares ...Middleware) MiddlewareOnion {
 }
 
 // NewNormalMiddlewareOnion returns a normal middleware onion. recover -> auth -> log.
-// the type of AuthFunc is "func(ctx *fasthttp.RequestCtx) bool"
-func NewNormalMiddlewareOnion(authFunc AuthFunc, logger *zap.Logger) MiddlewareOnion {
+// the type of AuthFunc is "func(ctx *fasthttp.RequestCtx) bool".
+// if your app is behind of Nginx, you may meed to set xRealIp to True so that get an actual remote address.
+func NewNormalMiddlewareOnion(authFunc AuthFunc, xRealIp bool, logger *zap.Logger) MiddlewareOnion {
 	return MiddlewareOnion{[]Middleware{
-		NewLogMiddleware(logger, true),
+		NewLogMiddleware(logger, xRealIp),
 		NewAuthMiddleware(authFunc),
 		NewRecoverMiddleware(logger),
 	}}
