@@ -51,7 +51,7 @@ func main() {
 
 ```go
 type AuthFunc func(ctx *fasthttp.RequestCtx) bool
-    AuthFunc
+    AuthFunc is your custom auth function type
 
 type Middleware func(h fasthttp.RequestHandler) fasthttp.RequestHandler
     Middleware is a function.
