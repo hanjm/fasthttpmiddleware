@@ -6,7 +6,6 @@ import (
 	"github.com/hanjm/zaplog"
 	"github.com/valyala/fasthttp"
 	"testing"
-	"time"
 )
 
 func TestNewNormalOnion(t *testing.T) {
@@ -28,24 +27,27 @@ func TestNewNormalOnion(t *testing.T) {
 	router.GET("/", mo.Apply(requestHandler))
 	router.GET("/protect", mo.Apply(requestHandler))
 	router.GET("/panic", mo.Apply(panicHandler))
+	doneChan := make(chan struct{})
 	go func() {
 		fasthttp.ListenAndServe(":8000", router.Handler)
 	}()
-	time.Sleep(time.Second)
-	var resp []byte
-	code, _, _ := fasthttp.Get(resp, "http://127.0.0.1:8000/")
-	if code != 200 {
-		t.Fatal("unexpected response")
-	}
-	code, _, _ = fasthttp.Get(resp, "http://127.0.0.1:8000/protect")
-	if code != 403 {
-		t.Fatal("unexpected response")
-	}
-	code, _, _ = fasthttp.Get(resp, "http://127.0.0.1:8000/panic")
-	if code != 500 {
-		t.Fatal("unexpected response")
-	}
-	time.Sleep(time.Second)
+	go func() {
+		var resp []byte
+		code, _, _ := fasthttp.Get(resp, "http://127.0.0.1:8000/")
+		if code != 200 {
+			t.Fatal("unexpected response")
+		}
+		code, _, _ = fasthttp.Get(resp, "http://127.0.0.1:8000/protect")
+		if code != 403 {
+			t.Fatal("unexpected response")
+		}
+		code, _, _ = fasthttp.Get(resp, "http://127.0.0.1:8000/panic")
+		if code != 500 {
+			t.Fatal("unexpected response")
+		}
+		doneChan <- struct{}{}
+	}()
+	<-doneChan
 }
 
 func TestMiddlewareOnion_Append(t *testing.T) {
