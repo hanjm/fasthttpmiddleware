@@ -4,6 +4,7 @@ import (
 	"github.com/valyala/fasthttp"
 )
 
+// AuthFunc
 type AuthFunc func(ctx *fasthttp.RequestCtx) bool
 
 // NewAuthMiddleware accepts a customer auth function and then returns a middleware which

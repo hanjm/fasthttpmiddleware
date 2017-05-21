@@ -11,9 +11,8 @@ import (
 func exampleAuthFunc(ctx *fasthttp.RequestCtx) bool {
 	if bytes.HasPrefix(ctx.Path(), []byte("/protect")) {
 		return false
-	} else {
-		return true
 	}
+	return true
 }
 
 func requestHandler(ctx *fasthttp.RequestCtx) {

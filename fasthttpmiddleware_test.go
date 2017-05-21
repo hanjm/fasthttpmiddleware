@@ -13,9 +13,8 @@ func TestNewNormalOnion(t *testing.T) {
 	exampleAuthFunc := func(ctx *fasthttp.RequestCtx) bool {
 		if bytes.HasPrefix(ctx.Path(), []byte("/protect")) {
 			return false
-		} else {
-			return true
 		}
+		return true
 	}
 	logger := zaplog.NewNoCallerLogger(false)
 	mo := NewNormalMiddlewareOnion(exampleAuthFunc, logger)

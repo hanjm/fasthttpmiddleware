@@ -19,9 +19,8 @@ import (
 func exampleAuthFunc(ctx *fasthttp.RequestCtx) bool {
 	if bytes.HasPrefix(ctx.Path(), []byte("/protect")) {
 		return false
-	} else {
-		return true
 	}
+	return true
 }
 
 func requestHandler(ctx *fasthttp.RequestCtx) {
@@ -52,8 +51,10 @@ func main() {
 
 ```go
 type AuthFunc func(ctx *fasthttp.RequestCtx) bool
+    AuthFunc
 
 type Middleware func(h fasthttp.RequestHandler) fasthttp.RequestHandler
+    Middleware is a function.
 
 func NewAuthMiddleware(authFunc AuthFunc) Middleware
     NewAuthMiddleware accepts a customer auth function and then returns a
@@ -79,7 +80,7 @@ type MiddlewareOnion struct {
     of middleware in MiddlewareOnion.layers locate at outside
 
 func NewMiddlewareOnion(middlewares ...Middleware) MiddlewareOnion
-    MiddlewareOnion returns a middleware onion with given middlewares
+    NewMiddlewareOnion returns a middleware onion with given middlewares
 
 func NewNormalMiddlewareOnion(authFunc AuthFunc, logger *zap.Logger) MiddlewareOnion
     NewNormalMiddlewareOnion returns a normal middleware onion. recover ->
@@ -91,6 +92,7 @@ func (o MiddlewareOnion) Append(middlewares ...Middleware) MiddlewareOnion
     to newLayers, then return a new middleware onion.
 
 func (o MiddlewareOnion) Apply(h fasthttp.RequestHandler) fasthttp.RequestHandler
+    Apply apply the middleware onion to a fasthttp.RequestHandler
 
 
 
