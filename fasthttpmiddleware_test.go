@@ -6,6 +6,7 @@ import (
 	"github.com/hanjm/zaplog"
 	"github.com/valyala/fasthttp"
 	"testing"
+	"fmt"
 )
 
 func TestNewNormalOnion(t *testing.T) {
@@ -16,7 +17,7 @@ func TestNewNormalOnion(t *testing.T) {
 		return true
 	}
 	logger := zaplog.NewNoCallerLogger(false)
-	mo := NewNormalMiddlewareOnion(exampleAuthFunc, logger)
+	mo := NewNormalMiddlewareOnion(exampleAuthFunc, false, logger)
 	requestHandler := func(ctx *fasthttp.RequestCtx) {
 		ctx.WriteString("hello")
 	}
@@ -24,12 +25,12 @@ func TestNewNormalOnion(t *testing.T) {
 		panic("test panic")
 	}
 	router := fasthttprouter.New()
-	router.GET("/", mo.Apply(requestHandler))
-	router.GET("/protect", mo.Apply(requestHandler))
-	router.GET("/panic", mo.Apply(panicHandler))
+	router.GET("/", requestHandler)
+	router.GET("/protect", requestHandler)
+	router.GET("/panic", panicHandler)
 	doneChan := make(chan struct{})
 	go func() {
-		fasthttp.ListenAndServe(":8000", router.Handler)
+		fasthttp.ListenAndServe(":8000", mo.Apply(router.Handler))
 	}()
 	go func() {
 		var resp []byte
@@ -45,6 +46,33 @@ func TestNewNormalOnion(t *testing.T) {
 		if code != 500 {
 			t.Fatal("unexpected response")
 		}
+		doneChan <- struct{}{}
+	}()
+	<-doneChan
+}
+
+func TestNewPrometheusMiddleware(t *testing.T) {
+	logger := zaplog.NewNoCallerLogger(false)
+	mo := NewMiddlewareOnion(
+		NewPrometheusMiddleware(":8001", false, logger),
+		NewRecoverMiddleware(logger),
+	)
+	requestHandler := func(ctx *fasthttp.RequestCtx) {
+		ctx.WriteString("hello")
+	}
+	router := fasthttprouter.New()
+	router.GET("/", requestHandler)
+	doneChan := make(chan struct{})
+	go func() {
+		fasthttp.ListenAndServe(":8002", mo.Apply(router.Handler))
+	}()
+	go func() {
+		var resp []byte
+		for i := 0; i < 10; i++ {
+			fasthttp.Get(resp, "http://127.0.0.1:8002/")
+		}
+		fasthttp.Get(resp, "http://127.0.0.1:8001/metrics")
+		fmt.Printf("%s", resp)
 		doneChan <- struct{}{}
 	}()
 	<-doneChan
