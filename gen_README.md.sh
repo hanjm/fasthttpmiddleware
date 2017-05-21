@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 echo "## a funny middleware onion for [fasthttp](github.com/valyala/fasthttp). inspired by [Alice](https://github.com/justinas/alice)"
 echo "[![GoDoc](https://godoc.org/github.com/hanjm/fasthttpmiddleware?status.svg)](https://godoc.org/github.com/hanjm/fasthttpmiddleware)"
+echo "[![Coverage](http://gocover.io/_badge/github.com/hanjm/fasthttpmiddleware)](http://gocover.io/github.com/hanjm/fasthttpmiddleware)"
 echo ""
 echo "### Example"
 echo ""

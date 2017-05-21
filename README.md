@@ -1,5 +1,6 @@
 ## a funny middleware onion for [fasthttp](github.com/valyala/fasthttp). inspired by [Alice](https://github.com/justinas/alice)
 [![GoDoc](https://godoc.org/github.com/hanjm/fasthttpmiddleware?status.svg)](https://godoc.org/github.com/hanjm/fasthttpmiddleware)
+[![Coverage](http://gocover.io/_badge/github.com/hanjm/fasthttpmiddleware)](http://gocover.io/github.com/hanjm/fasthttpmiddleware)
 
 ### Example
 
