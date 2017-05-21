@@ -31,16 +31,16 @@ func panicHandler(ctx *fasthttp.RequestCtx) {
 
 func main() {
 	logger := zaplog.NewNoCallerLogger(false)
-	middleware := fasthttpmiddleware.NewNormalMiddlewareOnion(exampleAuthFunc, logger)
-	noAuthMiddleware := fasthttpmiddleware.New(
+	mo := fasthttpmiddleware.NewNormalMiddlewareOnion(exampleAuthFunc, logger)
+	moWithoutAuth := fasthttpmiddleware.NewMiddlewareOnion(
 		fasthttpmiddleware.NewLogMiddleware(logger, false),
 		fasthttpmiddleware.NewRecoverMiddleware(logger),
 	)
 	router := fasthttprouter.New()
-	router.GET("/", middleware.Apply(requestHandler))
-	router.GET("/protect", middleware.Apply(requestHandler))
-	router.GET("/panic", middleware.Apply(panicHandler))
-	router.GET("/noAuth", noAuthMiddleware.Apply(requestHandler))
+	router.GET("/", mo.Apply(requestHandler))
+	router.GET("/protect", mo.Apply(requestHandler))
+	router.GET("/panic", mo.Apply(panicHandler))
+	router.GET("/noAuth", moWithoutAuth.Apply(requestHandler))
 	fasthttp.ListenAndServe(":8000", router.Handler)
 }
 ```
@@ -67,7 +67,7 @@ func NewLogMiddleware(logger *zap.Logger, xRealIp bool) Middleware
 func NewRecoverMiddleware(logger *zap.Logger) Middleware
     NewRecoverMiddleware return a middleware which can let app recover from
     a panic in request handler. panic stack info will appear on the field
-    named "trace" in the log line
+    named "stacktrace" in the log line
 
 type MiddlewareOnion struct {
     // contains filtered or unexported fields
@@ -83,14 +83,11 @@ func NewNormalMiddlewareOnion(authFunc AuthFunc, logger *zap.Logger) MiddlewareO
     auth -> log. the type of AuthFunc is "func(ctx *fasthttp.RequestCtx)
     bool"
 
-func (o MiddlewareOnion) Append(middlewares ...Middleware) []Middleware
+func (o MiddlewareOnion) Append(middlewares ...Middleware) MiddlewareOnion
     Append copy all middleware layers to newLayers, then append middlewares
-    to newLayers
+    to newLayers, then return a new middleware onion.
 
 func (o MiddlewareOnion) Apply(h fasthttp.RequestHandler) fasthttp.RequestHandler
-
-func (o MiddlewareOnion) Extend(middlewares ...Middleware)
-    Extend append middlewares to MiddlewareOnion.layers
 
 
 
