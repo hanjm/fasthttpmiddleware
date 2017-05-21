@@ -59,8 +59,9 @@ type Middleware func(h fasthttp.RequestHandler) fasthttp.RequestHandler
 
 func NewAuthMiddleware(authFunc AuthFunc) Middleware
     NewAuthMiddleware accepts a customer auth function and then returns a
-    middleware which if auth function returns false, it will term the HTTP
-    request and response 403 status code
+    middleware which only accepts auth passed request. If auth function
+    returns false, it will term the HTTP request and response 403 status
+    code
 
 func NewLogMiddleware(logger *zap.Logger, xRealIp bool) Middleware
     NewLogMiddleware returns a middleware which log code(status code),
