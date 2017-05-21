@@ -18,7 +18,7 @@ func TestNewNormalOnion(t *testing.T) {
 		}
 	}
 	logger := zaplog.NewNoCallerLogger(false)
-	middleware := NewNormalMiddlewareOnion(exampleAuthFunc, logger)
+	mo := NewNormalMiddlewareOnion(exampleAuthFunc, logger)
 	requestHandler := func(ctx *fasthttp.RequestCtx) {
 		ctx.WriteString("hello")
 	}
@@ -26,9 +26,9 @@ func TestNewNormalOnion(t *testing.T) {
 		panic("test panic")
 	}
 	router := fasthttprouter.New()
-	router.GET("/", middleware.Apply(requestHandler))
-	router.GET("/protect", middleware.Apply(requestHandler))
-	router.GET("/panic", middleware.Apply(panicHandler))
+	router.GET("/", mo.Apply(requestHandler))
+	router.GET("/protect", mo.Apply(requestHandler))
+	router.GET("/panic", mo.Apply(panicHandler))
 	go func() {
 		fasthttp.ListenAndServe(":8000", router.Handler)
 	}()
@@ -47,4 +47,17 @@ func TestNewNormalOnion(t *testing.T) {
 		t.Fatal("unexpected response")
 	}
 	time.Sleep(time.Second)
+}
+
+func TestMiddlewareOnion_Append(t *testing.T) {
+	mo := NewMiddlewareOnion()
+	if len(mo.layers) != 0 {
+		t.Fatal(mo.layers)
+	}
+	logger := zaplog.NewNoCallerLogger(false)
+	loggerMiddleware := NewLogMiddleware(logger, false)
+	newMo := mo.Append(loggerMiddleware)
+	if len(mo.layers) != 0 || len(newMo.layers) != 1 {
+		t.Fatal(mo.layers, newMo.layers)
+	}
 }
