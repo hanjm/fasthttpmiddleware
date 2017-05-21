@@ -9,7 +9,7 @@ import (
 
 // NewLogMiddleware returns a middleware which log code(status code), time(response time), method(request method), path(request URL ath), addr(remote address).
 // if the status code is 2xx, the log level is info, otherwise, the log level is  warn.
-// if your app is behind of Nginx, you may meed to set xRealIp to True so that get an actual remoteAdr.
+// if your app is behind of Nginx, you may meed to set xRealIp to True so that get an actual remote address.
 func NewLogMiddleware(logger *zap.Logger, xRealIp bool) Middleware {
 	return func(h fasthttp.RequestHandler) fasthttp.RequestHandler {
 		return func(ctx *fasthttp.RequestCtx) {
