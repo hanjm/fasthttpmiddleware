@@ -2,11 +2,11 @@ package fasthttpmiddleware
 
 import (
 	"bytes"
+	"fmt"
 	"github.com/buaazp/fasthttprouter"
 	"github.com/hanjm/zaplog"
 	"github.com/valyala/fasthttp"
 	"testing"
-	"fmt"
 )
 
 func TestNewNormalOnion(t *testing.T) {
