@@ -3,8 +3,8 @@ package fasthttpmiddleware
 import (
 	"github.com/valyala/fasthttp"
 	"go.uber.org/zap"
-	"time"
 	"go.uber.org/zap/zapcore"
+	"time"
 )
 
 // NewLogMiddleware returns a middleware which log code(status code), time(response time), method(request method), path(request URL ath), addr(remote address).
