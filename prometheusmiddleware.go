@@ -25,7 +25,7 @@ var (
 	}, promLabelNames)
 )
 
-// NewPrometheusMiddleware return a middleware which can be used by [prometheus](https://github.com/prometheus/prometheus)
+// NewPrometheusMiddleware return a middleware which can be used by [prometheus](https://github.com/prometheus/prometheus) collecting metrics.
 // The prometheus is a monitoring system and time series database.
 // Note: the returned middleware contains the function of logmiddleware.
 func NewPrometheusMiddleware(bindAddr string, xRealIp bool, logger *zap.Logger) Middleware {
@@ -50,7 +50,7 @@ func NewPrometheusMiddleware(bindAddr string, xRealIp bool, logger *zap.Logger) 
 			responseTime := time.Since(startTime).Seconds() * 1000
 			responseTimeSummary.With(promLabels).Observe(responseTime)
 			requestCounter.With(promLabels).Inc()
-			if ctx.Response.StatusCode() / 100 == 2 {
+			if ctx.Response.StatusCode()/100 == 2 {
 				logger.Info("access", zap.Int("code", ctx.Response.StatusCode()), zap.Float64("time", responseTime), zap.String("method", promLabels["method"]), zap.String("path", promLabels["path"]), addrField)
 			} else {
 				logger.Warn("access", zap.Int("code", ctx.Response.StatusCode()), zap.Float64("time", responseTime), zap.String("method", promLabels["method"]), zap.String("path", promLabels["path"]), addrField)

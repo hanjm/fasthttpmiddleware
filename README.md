@@ -72,9 +72,9 @@ func NewLogMiddleware(logger *zap.Logger, xRealIp bool) Middleware
 
 func NewPrometheusMiddleware(bindAddr string, xRealIp bool, logger *zap.Logger) Middleware
     NewPrometheusMiddleware return a middleware which can be used by
-    [prometheus](https://github.com/prometheus/prometheus) The prometheus is
-    a monitoring system and time series database. Note: the returned
-    middleware contains the function of logmiddleware.
+    [prometheus](https://github.com/prometheus/prometheus) collecting
+    metrics. The prometheus is a monitoring system and time series database.
+    Note: the returned middleware contains the function of logmiddleware.
 
 func NewRecoverMiddleware(logger *zap.Logger) Middleware
     NewRecoverMiddleware return a middleware which can let app recover from
