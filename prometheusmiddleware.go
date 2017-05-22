@@ -27,7 +27,7 @@ var (
 
 // NewPrometheusMiddleware return a middleware which can be used by [prometheus](https://github.com/prometheus/prometheus) collecting metrics.
 // The prometheus is a monitoring system and time series database.
-func NewPrometheusMiddleware(bindAddr string, xRealIp bool, logger *zap.Logger) Middleware {
+func NewPrometheusMiddleware(bindAddr string, logger *zap.Logger) Middleware {
 	go func() {
 		if !isRegistered {
 			prometheus.MustRegister(requestCounter)
