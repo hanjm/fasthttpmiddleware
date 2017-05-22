@@ -20,8 +20,8 @@ var (
 			Help: "http requests total",
 		}), promLabelNames)
 	responseTimeSummary = prometheus.NewSummaryVec(prometheus.SummaryOpts{
-		Name: "http_request_duration_microseconds",
-		Help: "http request duration microseconds",
+		Name: "http_request_duration_milliseconds",
+		Help: "http request duration (ms)",
 	}, promLabelNames)
 )
 
