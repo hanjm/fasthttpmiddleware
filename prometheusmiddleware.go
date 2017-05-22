@@ -16,12 +16,12 @@ var (
 	promLabelNames = []string{"code", "method", "path"}
 	requestCounter = prometheus.NewCounterVec(
 		prometheus.CounterOpts(prometheus.Opts{
-			Name: "request_count",
-			Help: "request count",
+			Name: "http_requests_total",
+			Help: "http requests total",
 		}), promLabelNames)
 	responseTimeSummary = prometheus.NewSummaryVec(prometheus.SummaryOpts{
-		Name: "response_time",
-		Help: "response time (second)",
+		Name: "http_request_duration_microseconds",
+		Help: "http request duration microseconds",
 	}, promLabelNames)
 )
 
@@ -47,10 +47,10 @@ func NewPrometheusMiddleware(bindAddr string, xRealIp bool, logger *zap.Logger) 
 				addrField = zap.String("addr", ctx.RemoteAddr().String())
 			}
 			promLabels := prometheus.Labels{"code": strconv.Itoa(ctx.Response.StatusCode()), "method": string(ctx.Method()), "path": string(ctx.Path())}
-			responseTime := time.Since(startTime).Seconds()
+			responseTime := time.Since(startTime).Seconds() * 1000
 			responseTimeSummary.With(promLabels).Observe(responseTime)
 			requestCounter.With(promLabels).Inc()
-			if ctx.Response.StatusCode()/100 == 2 {
+			if ctx.Response.StatusCode() / 100 == 2 {
 				logger.Info("access", zap.Int("code", ctx.Response.StatusCode()), zap.Float64("time", responseTime), zap.String("method", promLabels["method"]), zap.String("path", promLabels["path"]), addrField)
 			} else {
 				logger.Warn("access", zap.Int("code", ctx.Response.StatusCode()), zap.Float64("time", responseTime), zap.String("method", promLabels["method"]), zap.String("path", promLabels["path"]), addrField)
